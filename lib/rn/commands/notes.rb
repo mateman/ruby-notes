@@ -14,6 +14,7 @@ module RN
         ]
         
         include RN
+        require 'tty-editor'
 
         def call(title:, **options)
           book = options[:book]
@@ -29,7 +30,8 @@ module RN
           elsif File.exist?("#{path}#{title}.rn")
             warn "Existe una Note llamada '#{title}'\n"
           else
-            File.write("#{path}#{title}.rn","contenido")
+            File.write("#{path}#{title}.rn","")
+            TTY::Editor.open("#{path}#{title}.rn")
             puts "Creada la Note #{title}"
           end
           #warn "TODO: Implementar creación de la nota con título '#{title}' (en el libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
@@ -82,10 +84,28 @@ module RN
           '"New note" --book "My book" # Edits a note titled "New note" from the book "My book"',
           'thoughts --book Memoires    # Edits a note titled "thoughts" from the book "Memoires"'
         ]
+        include RN
+        require 'tty-editor'
 
         def call(title:, **options)
           book = options[:book]
-          warn "TODO: Implementar modificación de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          if book.nil?
+             path = "#{path_rns}global/"
+          elsif Dir.exist?("#{path_rns}/folders/#{book}")
+             path = "#{path_rns}/folders/#{book}/"
+          else
+             path = nil 
+          end
+          if path.nil?
+             warn "No existe el Book #{book}"
+          elsif File.exist?("#{path}#{title}.rn")
+             TTY::Editor.open("#{path}#{title}.rn")
+             puts "Editada la Note #{title}"
+          else 
+             warn "No existe una Note llamada #{title}\n"
+          end
+#
+#          warn "TODO: Implementar modificación de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
         end
       end
 
@@ -180,7 +200,8 @@ module RN
           if path.nil?
              warn "No existe el Book #{book}"
           elsif File.exist?("#{path}#{title}.rn")
-             (File.open("#{path}#{title}.rn")).each_line {|l| puts l}
+#             (File.open("#{path}#{title}.rn")).each_line {|l| puts l} # mi viejo show hasta que vi la clase 29-10-2020
+             puts File.read("#{path}#{title}.rn") 
           else 
              warn "No existe una Note llamada #{title}\n"
           end

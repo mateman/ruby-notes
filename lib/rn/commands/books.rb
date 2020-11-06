@@ -39,6 +39,7 @@ module RN
         def call(name: nil, **options)
           global = options[:global]
            if Dir.exist?("#{path_rns}folders/#{name}") 
+               (Dir.new("#{path_rns}folders/#{name}/")).children().map{|d| File.delete("#{path_rns}folders/#{name}/#{d}")}
                Dir.rmdir("#{path_rns}folders/#{name}")
                puts "Book #{name} eliminado con exito"
            else

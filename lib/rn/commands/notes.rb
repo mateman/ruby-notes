@@ -109,6 +109,44 @@ module RN
         end
       end
 
+      class Export < Dry::CLI::Command
+        desc 'Export the content a note'
+
+        argument :title, required: true, desc: 'Title of the note'
+        option :book, type: :string, desc: 'Book'
+
+        example [
+          'todo                        # Export a note titled "todo" from the global book',
+          '"New note" --book "My book" # Export a note titled "New note" from the book "My book"',
+          'thoughts --book Memoires    # Export a note titled "thoughts" from the book "Memoires"'
+        ]
+        include RN
+        require 'redcarpet'
+
+        def call(title:, **options)
+          book = options[:book]
+          if book.nil?
+             path = "#{path_rns}global/"
+          elsif Dir.exist?("#{path_rns}/folders/#{book}")
+             path = "#{path_rns}/folders/#{book}/"
+          else
+             path = nil 
+          end
+          if path.nil?
+             warn "No existe el Book #{book}"
+          elsif File.exist?("#{path}#{title}.rn")
+             renderer = Redcarpet::Render::HTML.new(prettify: true)
+             markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
+             File.write("#{path}#{title}.html",(markdown.render(File.read("#{path}#{title}.rn"))))
+             puts "Exportada la Note #{title} como #{title}.html"
+          else 
+             warn "No existe una Note llamada #{title}\n"
+          end
+#
+#          warn "TODO: Implementar modificación de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+        end
+      end
+
       class Retitle < Dry::CLI::Command
         desc 'Retitle a note'
 

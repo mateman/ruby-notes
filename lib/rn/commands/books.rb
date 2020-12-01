@@ -49,6 +49,53 @@ module RN
         end
       end
 
+      class Exports < Dry::CLI::Command
+        desc 'export all notes in a book'
+
+        argument :name, required: false, desc: 'Name of the book'
+        option :global, type: :boolean, default: false, desc: 'Operate on the global book'
+
+        example [
+          '--global  # Exports all notes from the global book',
+          '"My book" # Exports all notes in a book named "My book"',
+          'Memoires  # Exports all notes in a book named "Memoires"'
+        ]
+        include RN
+        include Notes
+        require 'redcarpet'
+
+        def call(name: nil, **options)
+          global = options[:global]
+           if Dir.exist?("#{path_rns}folders/#{name}") 
+               renderer = Redcarpet::Render::HTML.new(prettify: true)
+               markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
+               (Dir.new("#{path_rns}folders/#{name}/")).children().map{|d| File.write("#{path_rns}folders/#{name}/#{d.gsub(/.rn$/,'.html')}",(markdown.render(File.read("#{path_rns}folders/#{name}/#{d}"))))}
+               puts "Exportado todos las notas de Book #{name} con exito"
+           else
+               warn "No existe un Book con el nombre #{name}"
+           end
+        end
+      end
+
+      class Exports_all < Dry::CLI::Command
+        desc 'Export all notes from all books'
+
+        example [
+          '           # Export all notes from all books'
+        ]
+        include RN
+        require 'redcarpet'
+
+        def call(*)
+           renderer = Redcarpet::Render::HTML.new(prettify: true)
+           markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
+           (Dir.new("#{path_rns}folders/")).children().map{|d| (Dir.new("#{path_rns}folders/#{d}/")).children().map{|e| File.write("#{path_rns}folders/#{d}/#{e.gsub(/.rn$/,'.html')}",(markdown.render(File.read("#{path_rns}folders/#{d}/#{e}"))))}}
+           (Dir.new("#{path_rns}global/")).children().map{|d| File.write("#{path_rns}global/#{d.gsub(/.rn$/,'.html')}",(markdown.render(File.read("#{path_rns}global/#{d}"))))}
+           puts "Exportada todas las notas con exito"
+        end
+
+      end
+
       class List < Dry::CLI::Command
         desc 'List books'
 

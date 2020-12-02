@@ -19,9 +19,9 @@ module RN
         def call(title:, **options)
           book = options[:book]
           if book.nil?
-             path = "#{path_rns}global/"
-          elsif Dir.exist?("#{path_rns}/folders/#{book}")
-             path = "#{path_rns}/folders/#{book}/"
+             path = path_global()
+          elsif exist_book?(book)
+             path = path_book(book)
           else
              path = nil 
           end
@@ -56,9 +56,9 @@ module RN
         def call(title:, **options)
           book = options[:book]
           if book.nil?
-             path = "#{path_rns}global/"
-          elsif Dir.exist?("#{path_rns}/folders/#{book}")
-             path = "#{path_rns}/folders/#{book}/"
+             path = path_global()
+          elsif exist_book?(book)
+             path = path_book(book)
           else
              path = nil 
           end
@@ -91,9 +91,9 @@ module RN
         def call(title:, **options)
           book = options[:book]
           if book.nil?
-             path = "#{path_rns}global/"
-          elsif Dir.exist?("#{path_rns}/folders/#{book}")
-             path = "#{path_rns}/folders/#{book}/"
+             path = path_global()
+          elsif exist_book?(book)
+             path = path_book(book)
           else
              path = nil 
           end
@@ -126,9 +126,9 @@ module RN
         def call(title:, **options)
           book = options[:book]
           if book.nil?
-             path = "#{path_rns}global/"
-          elsif Dir.exist?("#{path_rns}/folders/#{book}")
-             path = "#{path_rns}/folders/#{book}/"
+             path = path_global()
+          elsif exist_book?(book)
+             path = path_book(book)
           else
              path = nil 
           end
@@ -162,9 +162,9 @@ module RN
         def call(old_title:, new_title:, **options)
           book = options[:book]
           if book.nil?
-             path = "#{path_rns}global/"
-          elsif Dir.exist?("#{path_rns}/folders/#{book}")
-             path = "#{path_rns}/folders/#{book}/"
+             path = path_global()
+          elsif exist_book?(book)
+             path = path_book(book)
           else
              path = nil 
           end
@@ -202,9 +202,9 @@ module RN
           book = options[:book]
           global = options[:global]
           if book.nil?
-              path = "#{path_rns}global/"
-          elsif not(book.nil?) && Dir.exist?("#{path_rns}/folders/#{book}")
-             path = "#{path_rns}/folders/#{book}"
+              path = path_global()
+          elsif not(book.nil?) && exist_book?(book)
+             path = path_book(book)
           else
              warn "No existe el Book " 
           end
@@ -230,9 +230,9 @@ module RN
         def call(title:, **options)
           book = options[:book]
           if book.nil?
-             path = "#{path_rns}global/"
-          elsif Dir.exist?("#{path_rns}/folders/#{book}")
-             path = "#{path_rns}/folders/#{book}/"
+             path = path_global()
+          elsif exist_book?(book)
+             path = path_book(book)
           else
              path = nil 
           end

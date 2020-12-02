@@ -10,13 +10,13 @@ module RN
           '"My book" # Creates a new book named "My book"',
           'Memoires  # Creates a new book named "Memoires"'
         ]
-        include RN
+        include RN::Models::Book
 
         def call(name:, **)
-           if Dir.exist?("#{path_rns}folders/#{name}")
+           if exist_book?(name)
                warn "No se puede crear un Book con el nombre #{name} por que ya existe uno con ese nombre"
            else 
-               Dir.mkdir("#{path_rns}folders/#{name}")
+               create(name)
                puts "Nuevo Book #{name} creado con exito"
            end
 #          warn "TODO: Implementar creación del cuaderno de notas con nombre '#{name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
@@ -34,13 +34,12 @@ module RN
           '"My book" # Deletes a book named "My book" and all of its notes',
           'Memoires  # Deletes a book named "Memoires" and all of its notes'
         ]
-        include RN
+        include RN::Models::Book
 
         def call(name: nil, **options)
           global = options[:global]
-           if Dir.exist?("#{path_rns}folders/#{name}") 
-               (Dir.new("#{path_rns}folders/#{name}/")).children().map{|d| File.delete("#{path_rns}folders/#{name}/#{d}")}
-               Dir.rmdir("#{path_rns}folders/#{name}")
+           if exist_book?(name) 
+               delete(name)
                puts "Book #{name} eliminado con exito"
            else
                warn "No existe un Book con el nombre #{name}"
@@ -60,16 +59,12 @@ module RN
           '"My book" # Exports all notes in a book named "My book"',
           'Memoires  # Exports all notes in a book named "Memoires"'
         ]
-        include RN
-        include Notes
-        require 'redcarpet'
+        include RN::Models::Book
 
         def call(name: nil, **options)
           global = options[:global]
-           if Dir.exist?("#{path_rns}folders/#{name}") 
-               renderer = Redcarpet::Render::HTML.new(prettify: true)
-               markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
-               (Dir.new("#{path_rns}folders/#{name}/")).children().map{|d| File.write("#{path_rns}folders/#{name}/#{d.gsub(/.rn$/,'.html')}",(markdown.render(File.read("#{path_rns}folders/#{name}/#{d}"))))}
+           if exist_book?(name) 
+               exports(name)               
                puts "Exportado todos las notas de Book #{name} con exito"
            else
                warn "No existe un Book con el nombre #{name}"
@@ -83,14 +78,11 @@ module RN
         example [
           '           # Export all notes from all books'
         ]
-        include RN
-        require 'redcarpet'
-
+        
+        include RN::Models::Book
+        
         def call(*)
-           renderer = Redcarpet::Render::HTML.new(prettify: true)
-           markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
-           (Dir.new("#{path_rns}folders/")).children().map{|d| (Dir.new("#{path_rns}folders/#{d}/")).children().map{|e| File.write("#{path_rns}folders/#{d}/#{e.gsub(/.rn$/,'.html')}",(markdown.render(File.read("#{path_rns}folders/#{d}/#{e}"))))}}
-           (Dir.new("#{path_rns}global/")).children().map{|d| File.write("#{path_rns}global/#{d.gsub(/.rn$/,'.html')}",(markdown.render(File.read("#{path_rns}global/#{d}"))))}
+           exports_all()
            puts "Exportada todas las notas con exito"
         end
 
@@ -102,10 +94,11 @@ module RN
         example [
           '          # Lists every available book'
         ]
-        include RN
+        
+        include RN::Models::Book
      
         def call(*)
-          (Dir.new("#{path_rns}folders/")).children().map{|d| puts d}
+           list()
 #          warn "TODO: Implementar listado de los cuadernos de notas.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
         end
       end
@@ -121,15 +114,16 @@ module RN
           'Memoires Memories            # Renames the book "Memoires" to "Memories"',
           '"TODO - Name this book" Wiki # Renames the book "TODO - Name this book" to "Wiki"'
         ]
-        include RN        
+        
+        include RN::Models::Book        
 
         def call(old_name:, new_name:, **)
-          if Dir.exist?("#{path_rns}folders/#{new_name}")
+          if exist_book?(new_name)
              warn "No se puede renombrar porque existe #{new_name}"
-          elsif not Dir.exist?("#{path_rns}folders/#{old_name}")
+          elsif not exist_book?(old_name)
              warn "No se puede renombrar porque no existe #{old_name}"
           else 
-             File.rename("#{path_rns}folders/#{old_name}","#{path_rns}folders/#{new_name}")
+             rename(old_name, new_name)
              puts "Renombrado #{old_name} por #{new_name}"
           end
 #          warn "TODO: Implementar renombrado del cuaderno de notas con nombre '#{old_name}' para que pase a llamarse '#{new_name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."

@@ -1,10 +1,22 @@
 module RN
   module Models
     module Note
-         
+      
       require 'tty-editor'
       require 'redcarpet'
   
+      def path_global()
+         "#{path_rns}global/"
+      end
+       
+      def path_book(book)
+         "#{path_rns}folders/#{book}/"
+      end   
+          
+      def exist_book?(name)
+         Dir.exist?("#{path_rns}folders/#{name}")
+      end
+      
       def exist_note?(path, title)
          File.exist?("#{path}#{title}.rn")
       end
@@ -23,9 +35,9 @@ module RN
       end
       
       def export(path, title)
-          renderer = Redcarpet::Render::HTML.new(prettify: true)
-          markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
-          File.write("#{path}#{title}.html",(markdown.render(File.read("#{path}#{title}.rn"))))
+         renderer = Redcarpet::Render::HTML.new(prettify: true)
+         markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
+         File.write("#{path}#{title}.html",(markdown.render(File.read("#{path}#{title}.rn"))))   
       end
       
       def retitle(path, old_title, new_title)
@@ -33,7 +45,7 @@ module RN
       end
       
       def list(path)
-         Dir.new(path).children().map{|d| d.include?('.rn') ? (puts (d.sub(".rn",""))) : nil}
+         Dir.new(path).children().map{|d| File.extname(d)==(".rn") ? (puts (d.sub(/.rn$/,""))) : nil}
       end
       
       def show(path, title)

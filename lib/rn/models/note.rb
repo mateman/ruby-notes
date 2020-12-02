@@ -3,6 +3,7 @@ module RN
     module Note
          
       require 'tty-editor'
+      require 'redcarpet'
   
       def exist_note?(path, title)
          File.exist?("#{path}#{title}.rn")
@@ -21,7 +22,10 @@ module RN
          TTY::Editor.open("#{path}#{title}.rn")
       end
       
-      def export()
+      def export(path, title)
+          renderer = Redcarpet::Render::HTML.new(prettify: true)
+          markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
+          File.write("#{path}#{title}.html",(markdown.render(File.read("#{path}#{title}.rn"))))
       end
       
       def retitle(path, old_title, new_title)

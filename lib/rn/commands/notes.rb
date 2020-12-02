@@ -121,7 +121,7 @@ module RN
           'thoughts --book Memoires    # Export a note titled "thoughts" from the book "Memoires"'
         ]
         include RN
-        require 'redcarpet'
+        include RN::Models::Note
 
         def call(title:, **options)
           book = options[:book]
@@ -134,10 +134,8 @@ module RN
           end
           if path.nil?
              warn "No existe el Book #{book}"
-          elsif File.exist?("#{path}#{title}.rn")
-             renderer = Redcarpet::Render::HTML.new(prettify: true)
-             markdown = Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)
-             File.write("#{path}#{title}.html",(markdown.render(File.read("#{path}#{title}.rn"))))
+          elsif exist_note?(path, title)
+             export(path, title)
              puts "Exportada la Note #{title} como #{title}.html"
           else 
              warn "No existe una Note llamada #{title}\n"

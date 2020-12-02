@@ -3,7 +3,6 @@ module RN
     autoload :Books, 'rn/commands/books'
     autoload :Notes, 'rn/commands/notes'
     autoload :Version, 'rn/commands/version'
-    autoload :Book, 'rn/models/book'
 
     extend Dry::CLI::Registry
 

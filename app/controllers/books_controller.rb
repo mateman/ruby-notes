@@ -5,7 +5,7 @@ class BooksController < ApplicationController
     before_action :set_book, only: [:show, :edit, :update, :destroy, :download ]
   
     def index
-        @books = Book.where( user_id: current_user.id).order('LOWER(title)')
+        @books = current_user.books.order('LOWER(title)')
 #        @books = @books.sort_by {|book| book.title} # Ruby Sorting
     end 
        
@@ -35,7 +35,7 @@ class BooksController < ApplicationController
     end
 
     def download
-        notes = Note.where("user_id == #{current_user.id} AND book_id == #{params[:id]}")
+        notes = currten_user.notes.where("book_id == #{params[:id]}")
         Dir.mkdir("tmp/#{current_user.id}")
         Dir.mkdir("tmp/#{current_user.id}/#{@book.title}")
         zipfile = Zip::File.open("tmp/#{current_user.id}.zip", Zip::File::CREATE)
@@ -54,20 +54,20 @@ class BooksController < ApplicationController
 
 
     def download_all
-        books = Book.where("user_id == #{current_user.id}")
+        books = current_user.books
         Dir.mkdir("tmp/#{current_user.id}")
         zipfile = Zip::File.open("tmp/#{current_user.id}.zip", Zip::File::CREATE)
         books.each do |b|
               Dir.mkdir("tmp/#{current_user.id}/#{b.title}")
               zipfile.mkdir("#{b.title}")
-              notes = Note.where("user_id == #{current_user.id} AND book_id == #{b.id}")
+              notes = current_user.notes.where("book_id == #{b.id}")
               notes.each do |n|
                  File.write("tmp/#{current_user.id}/#{b.title}/#{n.title}.html",n.markdown)
                  zipfile.add("#{b.title}/#{n.title}.html", "tmp/#{current_user.id}/#{b.title}/#{n.title}.html" )
-              end 
+              end
         end
         Dir.mkdir("tmp/#{current_user.id}global")
-        notes = Note.where("user_id == #{current_user.id} AND book_id is null")        
+        notes = current_user.notes.where("book_id is null")
         notes.each do |n|
              File.write("tmp/#{current_user.id}global/#{n.title}.html",n.markdown)
              zipfile.add("#{n.title}.html", "tmp/#{current_user.id}global/#{n.title}.html" )
@@ -89,7 +89,7 @@ class BooksController < ApplicationController
     end
 
     def set_book
-        @book = Book.where("id == #{params[:id]} AND user_id == #{current_user.id}").first
+        @book = current_user.books.find(params[:id])
         if @book.nil?
              render :'errors/403', status: :forbidden, :layout => false 
         end

@@ -3,7 +3,7 @@ class NotesController < ApplicationController
     before_action :set_note, only: [:show, :edit, :update, :destroy, :download]
     
     def index
-        @notes = Note.where( "user_id== #{current_user.id} AND book_id is null ").order("created_at DESC")
+        @notes = current_user.notes.where("book_id is null").order("created_at DESC")
     end
  
     def new
@@ -36,7 +36,7 @@ class NotesController < ApplicationController
 
     def index_notes_of_book
         if current_user.id == Book.find(params[:book_id]).user_id
-          @notes = Note.where("user_id == #{current_user.id} AND book_id == #{params[:book_id]}").order("created_at DESC")
+          @notes = current_user.notes.where("book_id == #{params[:book_id]}").order("created_at DESC")
         else
            redirect_to "#{root_path}403" 
         end
@@ -56,7 +56,7 @@ class NotesController < ApplicationController
 
     # uso de callback de before_action
     def set_note
-        @note = Note.where(" id == #{params[:id]} AND user_id == #{current_user.id} ").first
+        @note = current_user.notes.find(params[:id])
         if @note.nil?
            redirect_to "#{root_path}403"
         end

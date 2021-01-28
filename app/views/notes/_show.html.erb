@@ -1,0 +1,10 @@
+<div id="show-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+         <h2><%= @note.title %></h2><BR>
+         <p><%= @note.content %></p><BR>
+         <% @note.book_id.nil? ? np = notes_path : np = notes_of_book_path(@note.book_id) %>
+         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>

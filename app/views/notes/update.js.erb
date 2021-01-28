@@ -1,0 +1,9 @@
+<% if @note.errors.empty? %>
+  // add the row to the table, show alert and hide modal
+  $('table tbody tr#<%= @note.id %>').replaceWith(' <%= j render "note", note: @note %>');
+  $('.alert').html("La nota se ha modificado con éxito").show();
+  $('#form-modal').modal('hide');
+<% else %>
+  // show first error
+  alert('<%= @note.errors.full_messages[0] %>');
+<% end %>

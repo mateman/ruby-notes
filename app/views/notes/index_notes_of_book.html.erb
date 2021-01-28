@@ -1,0 +1,12 @@
+<h2>Lista de notas para "<%= Book.find(params[:book_id]).title %>"</h2>
+<table class="table">
+  <thead>
+  </thead>
+  <tbody>
+<%= render @notes %>
+  </tbody>
+</table>
+<br />
+<%= link_to 'Crear una nota', new_note_of_book_path, remote: true,  class: 'btn btn-primary' %>
+<BR><BR>
+<%= link_to 'Volver a cuadernos', books_path, class: 'btn btn-primary' %>

@@ -1,0 +1,10 @@
+<h2>Lista de cuadernos</h2>
+<table class="table">
+  <thead>
+  </thead>
+  <tbody>
+<%= render @books %>
+  </tbody>
+</table>
+<br />
+<%= link_to 'Crear un cuaderno', new_book_path, remote: true, class: 'btn btn-primary' %>

@@ -12,7 +12,9 @@
  *
  *= require_tree .
  *= require_self
+ *
  */
+
 html {
  margin-right: 3px;
  margin-left: 10px;

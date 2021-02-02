@@ -1,10 +1,14 @@
 <h2>Lista de cuadernos</h2>
-<table class="table">
+<table class="table" id="tbook">
   <thead>
   </thead>
   <tbody>
 <%= render @books %>
   </tbody>
 </table>
+<p id="wp"><%= will_paginate @books, previous_label: h("<previo "), next_label: h(" siguiente>") %></p>
 <br />
 <%= link_to 'Crear un cuaderno', new_book_path, remote: true, class: 'btn btn-primary' %>
+<script>
+$('.alert').html(<%= @alert %>).show();
+</script>

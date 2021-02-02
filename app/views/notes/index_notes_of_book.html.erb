@@ -1,5 +1,5 @@
 <h2>Lista de notas para "<%= Book.find(params[:book_id]).title %>"</h2>
-<table class="table">
+<table class="table" id="tnote">
   <thead>
   </thead>
   <tbody>
@@ -7,6 +7,7 @@
   </tbody>
 </table>
 <br />
+<p class="paginate"><%= will_paginate @notes, previous_label: h("<previo "), next_label: h(" siguiente>") %></p>
 <%= link_to 'Crear una nota', new_note_of_book_path, remote: true,  class: 'btn btn-primary' %>
-<BR><BR>
+<br />
 <%= link_to 'Volver a cuadernos', books_path, class: 'btn btn-primary' %>

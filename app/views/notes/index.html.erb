@@ -1,5 +1,5 @@
 <h2>Lista de notas</h2>
-<table class="table">
+<table class="table" id="tnote">
   <thead>
   </thead>
   <tbody>
@@ -7,4 +7,5 @@
   </tbody>
 </table>
 <br />
+<p><%= will_paginate @notes , previous_label: h("<previo "), next_label: h(" siguiente>") %></p>
 <%= link_to 'Crear una nota', new_note_path, remote: true, class: 'btn btn-primary' %>

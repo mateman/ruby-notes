@@ -1,6 +1,11 @@
 <% if @book.errors.empty? %>
   // add the row to the table, show alert and hide modal
-  $('table tbody').prepend(' <%= j render "book", book: @book %>');
+  $('#tbook tbody').prepend(' <%= j render "book", book: @book %>');
+  if($('#tbook tr').length > 7)
+        {
+        $('#tbook tbody').find('tr:last').remove();
+        $('#wp').append(<%= will_paginate @books, previous_label: h("<previo "), next_label: h(" siguiente>") %>)
+        };
   $('.alert').html("El cuaderno ha sido creado con éxito").show();
   $('#form-modal').modal('hide');
 <% else %>

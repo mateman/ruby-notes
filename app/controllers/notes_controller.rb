@@ -3,7 +3,7 @@ class NotesController < ApplicationController
     before_action :set_note, only: [:show, :edit, :update, :destroy, :download]
     
     def index
-        @notes = current_user.notes.where("book_id is null").order("created_at DESC")
+        @notes = current_user.notes.paginate(page: params[:page], per_page: 7).where( "book_id is null ").order("created_at DESC")
     end
  
     def new
@@ -12,7 +12,14 @@ class NotesController < ApplicationController
     
     def create
         @note = current_user.notes.create note_params
-    end
+        if @note.errors.empty?
+              if (@note.book_id.nil?)
+                redirect_to notes_path 
+              else
+                redirect_to notes_of_book_path(@note.book_id)
+              end
+        end
+end
     
     def show
     end
@@ -36,7 +43,7 @@ class NotesController < ApplicationController
 
     def index_notes_of_book
         if current_user.id == Book.find(params[:book_id]).user_id
-          @notes = current_user.notes.where("book_id == #{params[:book_id]}").order("created_at DESC")
+          @notes = current_user.notes.paginate(page: params[:page], per_page: 7).where("book_id == #{params[:book_id]}").order("created_at DESC")
         else
            redirect_to "#{root_path}403" 
         end
@@ -45,11 +52,11 @@ class NotesController < ApplicationController
     def new_note_of_book
         @note = current_user.notes.new
         @note.book_id = params[:book_id]
+        
     end
 
-
     private
-
+    
     def note_params
         params.require(:note).permit(:title, :content, :book_id)
     end

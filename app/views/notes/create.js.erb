@@ -1,6 +1,12 @@
 <% if @note.errors.empty? %>
   // add the row to the table, show alert and hide modal
-  $('table tbody').prepend(' <%= j render "note", note: @note %>');
+  $('#tnote tbody').prepend(' <%= j render "note", note: @note %>');
+  if($('#tnote tr').length > 7)
+            {
+                // Eliminamos la ultima columna
+            $('#tnote tbody').find('tr:last').remove();
+
+            };
   $('.alert').html("La nota ha sido creado con éxito").show();
   $('#form-modal').modal('hide');
 <% else %>

@@ -2,6 +2,6 @@
 <th scope="row"><%= link_to book.title, book_path(book.id) %></th>
 <td><%= book.created_at.strftime("%d-%m-%Y   %H:%M") %></td>
 <td><%= link_to  '<i class="fas fa-download"></i>'.html_safe, download_zip_path(book) %></td>
-<td><%= link_to  '<i class="fas fa-edit"></i>'.html_safe, edit_book_path(book), remote: true %></td>
+<td><%= link_to  '<i class="fas fa-edit"></i>'.html_safe, edit_book_path(book) %></td>
 <td><%= link_to '<i class="fas fa-trash"></i>'.html_safe, book, method: :delete, data: { confirm: 'Esta seguro?' } %></td>
 </tr>

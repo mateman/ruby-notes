@@ -2,61 +2,69 @@
 <html>
   <head>
     <title>RubyNotes</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>"
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="<%= root_path %>lib/codemirror.css">
+    <script src="<%= root_path %>lib/codemirror.js"></script>
+    <script src="<%= root_path %>mode/markdown/markdown.js"></script>
+    <link rel="stylesheet" href="<%= root_path %>theme/dracula.css">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
   </head>
 
   <body>
-  
-  
-<nav class="navbar navbar-default">
+<div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/">Ruby-Note</a>
+    <a class="navbar-brand" href="#">
+    Ruby-Note
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <%- if user_signed_in? %>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+           <a class="nav-link dropdown-item" href=<%= notes_path %> >Notas sueltas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dropdown-item" href=<%= books_path %> >Cuadernos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dropdown-item" href=<%= download_all_path %> ><i class="fas fa-download"></i></a>
+        </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user"></i>
+            <%= current_user.name %>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+          <%=link_to 'Editar', edit_user_registration_path %><br>
+            <div class="dropdown-divider"></div>
+          <%= link_to 'Salir', destroy_user_session_path, method: :delete %>
+          </div>
+        </li>
+      </ul>
     </div>
-    <%- if user_signed_in? %>
-    <ul class="nav navbar-nav">
-      <li><%= link_to 'Notas sueltas', notes_path %></li>
-      <li><%= link_to 'Cuadernos', books_path %></li>
-      <li><%= link_to '<i class="fas fa-download"></i>'.html_safe, download_all_path %></li>
-     </ul>
-     <ul class="nav navbar-nav navbar-right">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user"></i>
-          <%= current_user.name %>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <ul>
-          <a><%=link_to 'Editar', edit_user_registration_path %></a><br>
-          <a><%= link_to 'Salir', destroy_user_session_path, method: :delete %></a>
-          </ul>
-        </div>
-      </li>
-     </ul>
     <% else %>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav ml-auto">
        <li class="nav-item">
-        <%= link_to 'Iniciar', new_user_session_path %>
+        <a class="nav-link dropdown-item" href=<%= new_user_session_path %>>Iniciar</a>
        </li>
        <li class="nav-item">
-        <%= link_to 'Registrarme', new_user_registration_path %>
+        <a class="nav-link dropdown-item" href=<%= new_user_registration_path %> >Registrarme</a>
        </li>
        </ul>
     <% end %>    
   </div>
 </nav>
+
+    <p class="alert""><%= alert %></p>
     <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= yield %>
+<%= yield %>
    </div>
   </body>
 </html>

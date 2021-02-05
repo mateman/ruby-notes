@@ -1,32 +1,15 @@
-<div id="form-modal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"><%= title %></h4>
-      </div>
-      <%= form_for @note, remote: true do |f| %>
-        <div class="modal-body">
-          <div class="form-group">
-             <%= f.hidden_field :book_id, value: @note.book_id %> 
-             <%= f.label :titulo %>
-             <%= f.text_field :title, class: "form-control input-lg", placeholder: "Nombre de la nota" %>
-          </div>
-          <div class="form-group">
-            <%= f.label :contenido %>
-            <%= f.text_area :content, class: "form-control input-lg", placeholder: "Texto de la nota" %>
-          </div>
-        </div>
+<%= form_for @note, remote: true do |f| %>
+    <%= f.hidden_field :book_id, value: @note.book_id %> 
+    <%= f.label :titulo %>
+    <%= f.text_field :title, class: "form-control input-lg", placeholder: "Nombre de la nota" %>
+    <%= f.label :contenido %>
+    <%= f.text_area :content, id: "form-note",  class: "codemirror-textarea form-control input-lg", placeholder: "Texto de la nota" %>
+    <%= f.submit 'Enviar', class: "btn btn-primary" %>
+    <%- if @note.book_id.nil? %>
+        <%= link_to 'Cancelar', notes_path, class: 'btn btn-secundary' %>
+    <% else %>
+        <%= link_to 'Cancelar', notes_of_book_path(@note.book_id), class: 'btn btn-secundary' %>
+    <% end %>
+    <% end %>
 
-        <div class="modal-footer">
-          <%= f.submit 'Enviar', class: "btn btn-primary" %>
-          <%- if @note.book_id.nil? %>
-              <%= link_to 'Cancelar', notes_path, class: 'btn btn-secundary' %>
-          <% else %>
-              <%= link_to 'Cancelar', notes_of_book_path(@note.book_id), class: 'btn btn-secundary' %>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div>
+

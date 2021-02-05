@@ -5,12 +5,11 @@ class BooksController < ApplicationController
     before_action :set_book, only: [:show, :edit, :update, :destroy, :download ]
   
     def index
-        @books = current_user.books.paginate(page: params[:page], per_page: 7).order('created_at DESC')
-#        @books = @books.sort_by {|book| book.title} # Ruby Sorting
+        @books = current_user.books.search(params).paginate(page: params[:page], per_page: 6).order('created_at DESC')
     end 
        
     def new
-        @book = current_user.books.new
+        @book = current_user.books.new       
     end
     
     def create
@@ -18,7 +17,7 @@ class BooksController < ApplicationController
         @book.user_id = current_user.id
         @book.save        
         if @book.errors.empty?
-           redirect_to books_path
+           redirect_to books_path, notice: "Se creo el cuaderno '#{@book.title}'"
         end
     end
 
@@ -31,11 +30,15 @@ class BooksController < ApplicationController
     
     def update
         @book.update book_params
+        if @book.errors.empty?
+           redirect_to books_path, notice: "Se actualizo el cuaderno '#{@book.title}'"
+        end
     end
     
     def destroy
+        titulo = @book.title
         @book.destroy
-        redirect_to books_path
+        redirect_to books_path, notice: "Se elimino el cuaderno '#{@book.title}'"
     end
 
     def download

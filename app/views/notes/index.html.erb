@@ -1,5 +1,11 @@
+<div class="form-group" align='right'>
+<form >
+ <input name='search' <%= @search %> >
+ <button type=”submit”><i class="fas fa-search"></i></button>
+</form>
+</div>
 <h2>Lista de notas</h2>
-<table class="table" id="tnote">
+<table class="table table-striped table-bordered" id="tnote">
   <thead>
   </thead>
   <tbody>
@@ -7,5 +13,6 @@
   </tbody>
 </table>
 <br />
-<p><%= will_paginate @notes , previous_label: h("<previo "), next_label: h(" siguiente>") %></p>
-<%= link_to 'Crear una nota', new_note_path, remote: true, class: 'btn btn-primary' %>
+<%= will_paginate @notes, class: "pagination page-link btn" %>
+<%= link_to 'Crear una nota', new_note_path,  class: 'btn btn-primary' %>
+

@@ -1,7 +1,7 @@
 <tr id=<%= note.id %> >
-<th scope="row"><%= link_to note.title, note_path(note), remote: true %></th>
+<th scope="row"><%= link_to note.title, note_path(note) %></th>
 <td><%= note.created_at.strftime("%d-%m-%Y   %H:%M") %></td>
 <td><%= link_to '<i class="fas fa-download"></i>'.html_safe, download_path(note) %></td>
-<td><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_note_path(note), remote: true %></td>
+<td><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_note_path(note) %></td>
 <td><%= link_to '<i class="fas fa-trash"></i>'.html_safe, note, method: :delete, data: { confirm: 'Esta seguro?'} %></td>
 </tr>

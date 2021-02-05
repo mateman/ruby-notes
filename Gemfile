@@ -32,8 +32,12 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'devise'
 
 # Bootstrap: para manejo de css en frontend
-#gem 'bootstrap'  # No lo uso porque no me anda bien, termine usando el link al bootstrap en layout
-#gem 'jquery-rails'
+#gem 'jquery'
+#gem 'bootstrap' # lo uso desde yarn  
+#gem 'popper_js'
+#gem 'datatable'
+#gem "codemirror-rails"
+
 # Para exportar archivos
 gem 'redcarpet'
 gem 'rubyzip'

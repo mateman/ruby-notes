@@ -9,6 +9,12 @@ class Book < ApplicationRecord
 ##    No lo necesito mas, ya que ahora le pido los books al current_user
 #    scope :books_for_user, -> (user_id){ where("user_id == ?", user_id)} 
 
+
+    def self.search(params)
+     books = self
+     books =  where("title like ?", "%#{params[:search]}%") if params[:search]
+     books
+    end
     
     def to_s
         title

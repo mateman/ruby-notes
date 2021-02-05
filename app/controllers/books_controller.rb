@@ -5,18 +5,20 @@ class BooksController < ApplicationController
     before_action :set_book, only: [:show, :edit, :update, :destroy, :download ]
   
     def index
-        @books = current_user.books.order('LOWER(title)')
-#        @books = @books.sort_by {|book| book.title} # Ruby Sorting
+        @books = current_user.books.search(params).paginate(page: params[:page], per_page: 6).order('created_at DESC')
     end 
        
     def new
-        @book = current_user.books.new
+        @book = current_user.books.new       
     end
     
     def create
         @book = current_user.books.new book_params
         @book.user_id = current_user.id
-        @book.save
+        @book.save        
+        if @book.errors.empty?
+           redirect_to books_path, notice: "Se creo el cuaderno '#{@book.title}'"
+        end
     end
 
     def show
@@ -28,14 +30,19 @@ class BooksController < ApplicationController
     
     def update
         @book.update book_params
+        if @book.errors.empty?
+           redirect_to books_path, notice: "Se actualizo el cuaderno '#{@book.title}'"
+        end
     end
     
     def destroy
+        titulo = @book.title
         @book.destroy
+        redirect_to books_path, notice: "Se elimino el cuaderno '#{@book.title}'"
     end
 
     def download
-        notes = currten_user.notes.where("book_id == #{params[:id]}")
+        notes = current_user.notes.where("book_id == #{params[:id]}")
         Dir.mkdir("tmp/#{current_user.id}")
         Dir.mkdir("tmp/#{current_user.id}/#{@book.title}")
         zipfile = Zip::File.open("tmp/#{current_user.id}.zip", Zip::File::CREATE)
@@ -60,14 +67,14 @@ class BooksController < ApplicationController
         books.each do |b|
               Dir.mkdir("tmp/#{current_user.id}/#{b.title}")
               zipfile.mkdir("#{b.title}")
-              notes = current_user.notes.where("book_id == #{b.id}")
+              notes = Note.where("user_id == #{current_user.id} AND book_id == #{b.id}")
               notes.each do |n|
                  File.write("tmp/#{current_user.id}/#{b.title}/#{n.title}.html",n.markdown)
                  zipfile.add("#{b.title}/#{n.title}.html", "tmp/#{current_user.id}/#{b.title}/#{n.title}.html" )
-              end
+              end 
         end
         Dir.mkdir("tmp/#{current_user.id}global")
-        notes = current_user.notes.where("book_id is null")
+        notes = Note.where("user_id == #{current_user.id} AND book_id is null")        
         notes.each do |n|
              File.write("tmp/#{current_user.id}global/#{n.title}.html",n.markdown)
              zipfile.add("#{n.title}.html", "tmp/#{current_user.id}global/#{n.title}.html" )

@@ -1,9 +1,1 @@
-<% if @book.errors.empty? %>
-  // add the row to the table, show alert and hide modal
-  $('table tbody').prepend(' <%= j render "book", book: @book %>');
-  $('.alert').html("El cuaderno ha sido creado con éxito").show();
-  $('#form-modal').modal('hide');
-<% else %>
-  // show first error
-  alert('<%= @book.errors.full_messages[0] %>');
-<% end %>
+alert('<%= @book.errors.full_messages[0] %>');

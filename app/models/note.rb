@@ -10,6 +10,18 @@ class Note < ApplicationRecord
     title
   end
 
+  def self.search(params)
+     notes = self
+     notes =  where("title like ? OR content like ?", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search]
+     notes
+  end
+
+
+  def show_content
+      renderer = Redcarpet::Render::HTML.new(prettify: true)
+      (Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)).render("#{content}")
+  end
+
   def markdown
       renderer = Redcarpet::Render::HTML.new(prettify: true)
       (Redcarpet::Markdown.new(renderer, fenced_code_blocks: true)).render("###### #{created_at}<br>\n**#{title}**<br>\n #{content}")

@@ -1,4 +1,0 @@
-$('<%= j render "form", title: "nueva nota para \"#{Book.find(@note.book_id).title}\"" %>').on('hidden.bs.modal', function (e) {
-  $(this).remove();
-  $('.modal-backdrop').remove();
-}).modal();

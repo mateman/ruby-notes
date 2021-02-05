@@ -1,0 +1,18 @@
+<h3>Contenido de "<%= @note.title %>" </h3>
+
+<%= form_for @note do |f| %>
+    <%= f.text_area :content, id: "form-note",  class: "codemirror-textarea form-control input-lg", placeholder: "Texto de la nota" %>
+    <%- if @note.book_id.nil? %>
+        <%= link_to 'Volver', notes_path, class: 'btn btn-primary' %>
+    <% else %>
+        <%= link_to 'Volver', notes_of_book_path(@note.book_id), class: 'btn btn-primary' %>
+    <% end %>
+    <% end %>
+
+<script>
+ CodeMirror.fromTextArea(document.getElementById("form-note"), {
+ theme: "defualt",
+ mode: "markdown",
+ readOnly: true
+})
+</script>

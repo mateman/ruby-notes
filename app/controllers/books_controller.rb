@@ -15,6 +15,7 @@ class BooksController < ApplicationController
     def create
         @book = current_user.books.new book_params
         @book.user_id = current_user.id
+	@book.title = @book.title.gsub(/^\s*/,'').gsub(/\s*$/,'')
         @book.save        
         if @book.errors.empty?
            redirect_to books_path, notice: "Se creo el cuaderno '#{@book.title}'"
@@ -29,6 +30,7 @@ class BooksController < ApplicationController
     end
     
     def update
+
         @book.update book_params
         if @book.errors.empty?
            redirect_to books_path, notice: "Se actualizo el cuaderno '#{@book.title}'"
@@ -58,7 +60,6 @@ class BooksController < ApplicationController
         send_data(File.read("tmp/#{current_user.id}.zip"), filename: "#{@book.title}.zip", type: 'application/zip' )
         File.delete("tmp/#{current_user.id}.zip")
     end
-
 
     def download_all
         books = current_user.books

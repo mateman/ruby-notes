@@ -8,7 +8,6 @@ class NotesController < ApplicationController
  
     def new
         @note = current_user.notes.new
-        @alert = "hola mundo"
     end
     
     def create
@@ -35,8 +34,9 @@ class NotesController < ApplicationController
     
     def destroy
         @note.book_id.nil? ? p = notes_path : p = notes_of_book_path(@note.book_id)
+        title = @note.title
         @note.destroy
-        redirect_to p, notice: "La nota se elimino exitosamente"
+        redirect_to p, notice: "La nota '#{ title }' se elimino exitosamente"
     end
 
     def download
@@ -54,7 +54,6 @@ class NotesController < ApplicationController
     def new_note_of_book
         @note = current_user.notes.new
         @note.book_id = params[:book_id]
-        
     end
 
     private

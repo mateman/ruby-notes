@@ -2,7 +2,7 @@ class Book < ApplicationRecord
     belongs_to :user, inverse_of: :books
     has_many :notes, dependent: :delete_all, inverse_of: :book
 
-    validates :title, presence:true, length: { maximum: 255 }
+    validates :title, presence:true, length: { maximum: 255 }, allow_blank: false
     validates :user_id, presence: true
     validates_uniqueness_of :title, scope: :user_id
 

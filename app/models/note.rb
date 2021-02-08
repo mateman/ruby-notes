@@ -2,7 +2,7 @@ class Note < ApplicationRecord
   belongs_to :user, inverse_of: :notes
   belongs_to :book, optional: true, inverse_of: :notes
 
-  validates :title, presence: true, length: { maximum: 255 }, format: { with: /\A\S[+-0-9a-zA-ZáéíóúÁÉÍÓÚüÜñÑ_!?#$%&.><()\s]*\S\z/, message: "no debe comenzar ni terminar con espacios en blanco, o caracter no permitido"}
+  validates :title, presence: true, length: { maximum: 255 }, format: { with: /\A\w[\w\s]*\S\z/, message: "no debe comenzar ni terminar con espacios en blanco, o caracter no permitido"}
   validates :content, presence: true
   validates_uniqueness_of :title, scope: [:book_id,:user_id]
   
@@ -16,7 +16,7 @@ class Note < ApplicationRecord
      else
        notes =  where("user_id == #{user} AND book_id == #{book}")
      end
-     notes =  where("title like ? OR content like ?", "%#{search}%", "%#{search}%") if search
+     notes =  notes.where("title like ? OR content like ?", "%#{search}%", "%#{search}%") if search
      notes
   end
 

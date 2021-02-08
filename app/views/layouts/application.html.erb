@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>RubyNotes</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -22,7 +22,7 @@
     <a class="navbar-brand" href="#">
     Ruby-Note
     </a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="navbar-collapse" id="navbarSupportedContent">
       <%- if user_signed_in? %>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">

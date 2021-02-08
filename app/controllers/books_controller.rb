@@ -5,7 +5,9 @@ class BooksController < ApplicationController
     before_action :set_book, only: [:show, :edit, :update, :destroy, :download ]
   
     def index
-        @books = current_user.books.search(params).paginate(page: params[:page], per_page: 6).order('created_at DESC')
+        @books = current_user.books.search(current_user.id, params ).paginate(page: params[:page], per_page: 6).order('created_at DESC')
+#        @books = @books.sort_by {|book| book.title} # Ruby Sorting
+
     end 
        
     def new

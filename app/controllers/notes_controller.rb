@@ -3,7 +3,7 @@ class NotesController < ApplicationController
     before_action :set_note, only: [:show, :edit, :update, :destroy, :download]
     
     def index
-        @notes = current_user.notes.search(params).paginate(page: params[:page], per_page: 5).where( "book_id is null ").order("created_at DESC")
+        @notes = current_user.notes.search(current_user.id, params[:search]).paginate(page: params[:page], per_page: 5).order("created_at DESC")
     end
  
     def new
@@ -45,7 +45,7 @@ class NotesController < ApplicationController
 
     def index_notes_of_book
         if current_user.id == Book.find(params[:book_id]).user_id
-          @notes = current_user.notes.search(params).paginate(page: params[:page], per_page: 5).where("book_id == #{params[:book_id]}").order("created_at DESC")
+          @notes = current_user.notes.search(current_user.id, params[:search], params[:book_id] ).paginate(page: params[:page], per_page: 5).order("created_at DESC")
         else
            redirect_to "#{root_path}403" 
         end

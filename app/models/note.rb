@@ -10,9 +10,13 @@ class Note < ApplicationRecord
     title
   end
 
-  def self.search(params)
-     notes = self
-     notes =  where("title like ? OR content like ?", "%#{params[:search]}%", "%#{params[:search]}%") if params[:search]
+  def self.search(user, search, book=nil)
+     if book== nil
+       notes =  where("user_id == #{user} AND book_id is null")
+     else
+       notes =  where("user_id == #{user} AND book_id == #{book}")
+     end
+     notes =  where("title like ? OR content like ?", "%#{search}%", "%#{search}%") if search
      notes
   end
 

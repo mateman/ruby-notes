@@ -2,7 +2,7 @@ class Book < ApplicationRecord
     belongs_to :user, inverse_of: :books
     has_many :notes, dependent: :delete_all, inverse_of: :book
 
-    validates :title, presence:true, length: { maximum: 255 }, allow_blank: false, format: { with: /\A\S[+-0-9a-zA-ZáéíóúÁÉÍÓÚüÜñÑ_!?#$%&.><()\s]*\S\z/, message: "no debe comenzar ni terminar con espacios en blanco, o caracter no permitido"}
+    validates :title, presence:true, length: { maximum: 255 },  format: { with: /\A\S[+-0-9a-zA-ZáéíóúÁÉÍÓÚüÜñÑ_!?#$%&.><()\s]*\S\z/, message: "no debe comenzar ni terminar con espacios en blanco, o caracter no permitido"}
     validates :user_id, presence: true
     validates_uniqueness_of :title, scope: :user_id
 
@@ -10,8 +10,8 @@ class Book < ApplicationRecord
 #    scope :books_for_user, -> (user_id){ where("user_id == ?", user_id)} 
 
 
-    def self.search(params)
-     books = self
+    def self.search(user, params)
+     books = self.where("user_id = #{user}")
      books =  where("title like ?", "%#{params[:search]}%") if params[:search]
      books
     end

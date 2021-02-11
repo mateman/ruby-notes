@@ -2,7 +2,7 @@ class Book < ApplicationRecord
     belongs_to :user, inverse_of: :books
     has_many :notes, dependent: :delete_all, inverse_of: :book
 
-    validates :title, presence:true, length: { maximum: 255 }, format: { with: /\A(\w|(\S[\w\s]*\S))\z/, message: "no debe comenzar ni terminar con espacios en blanco"}
+    validates :title, presence:true, length: { maximum: 255 }, format: { with: /\A(\w|(\w[\w\s]*\w))\z/, message: "no debe comenzar ni terminar con espacios en blanco"}
     validates :user_id, presence: true
     validates_uniqueness_of :title, scope: :user_id
 

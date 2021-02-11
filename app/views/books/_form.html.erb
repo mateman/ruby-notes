@@ -1,6 +1,7 @@
 <%= form_for @book, remote: true do |f| %>
     <%= f.label :titulo %>
     <%= f.text_field :title, class: "form-control input-lg", placeholder: "Nombre del cuaderno" %>
+    <br />
     <%= f.submit 'Enviar', class: "btn btn-primary" %>
     <%= link_to 'Cancelar', books_path, class: 'btn btn-secundary' %>
 <% end %>
